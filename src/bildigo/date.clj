@@ -1,9 +1,13 @@
 (ns bildigo.date
-  (:import [java.util TimeZone]
-           [java.text SimpleDateFormat]))
+  (:import
+   [java.util Date TimeZone]
+   [java.text SimpleDateFormat]))
 
-(def formatter (doto (SimpleDateFormat. "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-                 (.setTimeZone (TimeZone/getTimeZone "CET"))))
+(def ^:private iso-8601-formatter
+  (doto (SimpleDateFormat. "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    (.setTimeZone (TimeZone/getTimeZone "CET"))))
 
-(defn format! [date]
-  (.format formatter date))
+(defn iso-8601-format
+  "Formats a Java Date object in ISO 8601 format."
+  [^Date date]
+  (.format iso-8601-formatter date))

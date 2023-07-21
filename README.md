@@ -13,3 +13,7 @@ http://localhost:8080/hello
 http://localhost:8080/hello?name=Cristian
 
 http://localhost:8080/bye
+
+## Tests
+
+    $ lein test

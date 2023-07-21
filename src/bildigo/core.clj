@@ -11,11 +11,15 @@
    [bildigo.env :as env])
   (:import [java.util Date]))
 
-(defn hello-handler [{params :params}]
-  (response {:greeting (format "Hello %s" (get params "name" "Anonymous"))
-             :timestamp (date/format! (Date.))}))
+(defn- hello-handler
+  "Returns a JSON response. Can optionally take a <name> parameter."
+  [{params :params}]
+  (response {:greeting (format "Hello %s!" (get params "name" "Anonymous"))
+             :timestamp (date/iso-8601-format (Date.))}))
 
-(defn bye-handler [_]
+(defn- bye-handler
+  "Returns a plain text response. Takes no parameters."
+  [_]
   (content-type (response "Goodbye!") "text/plain"))
 
 (defroutes routes
@@ -25,9 +29,11 @@
 
 (def app
   (-> routes
+      ;; middleware
       wrap-params
       wrap-json-response))
 
 (defn -main
+  "Starts a simple HTTP server, with only 2 routes: /hello and /bye."
   [& _args]
   (run-jetty app {:port env/PORT}))
